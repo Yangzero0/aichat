@@ -1,0 +1,27 @@
+# 宝塔面板伪静态规则 - PHP隐藏扩展名
+if (!-e $request_filename){
+    rewrite ^/(.*)$ /$1.php last;
+}
+
+# 或使用try_files方式
+location / {
+    try_files $uri $uri/ @php;
+}
+
+location @php {
+    rewrite ^/(.*)$ /$1.php last;
+}
+
+# 静态文件缓存
+location ~ .*\.(gif|jpg|jpeg|png|bmp|swf|flv|mp4|ico)$ {
+    expires 30d;
+}
+
+location ~ .*\.(js|css)?$ {
+    expires 7d;
+}
+
+# 禁止访问敏感文件
+location ~ /\.(ht|git|svn) {
+    deny all;
+}
